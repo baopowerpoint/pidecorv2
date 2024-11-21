@@ -11,6 +11,10 @@
   "dependencies": {
     "@clerk/localizations": "^3.6.5",
     "@clerk/nextjs": "^6.4.1",
+    "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-separator": "^1.1.0",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@tabler/icons-react": "^3.22.0",
     "@tailwindcss/typography": "^0.5.15",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

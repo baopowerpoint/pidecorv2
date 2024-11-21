@@ -1,10 +1,12 @@
 import { viVN } from "@clerk/localizations";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-// import "@uploadthing/react/styles.css";
 
+// import "@uploadthing/react/styles.css";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -43,6 +45,8 @@ const RootLayout = async ({
         <body className={`${mont.className} ${pacifico.variable} antialiased`}>
           <NuqsAdapter> {children}</NuqsAdapter>
           <Toaster />
+          <SpeedInsights />
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>

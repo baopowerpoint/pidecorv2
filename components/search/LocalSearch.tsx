@@ -4,7 +4,6 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
-import { withSuspense } from "../HOC/withSuspense";
 import { Input } from "../ui/input";
 
 interface LocalSearchProps {
@@ -44,4 +43,4 @@ function LocalSearchComponent({
   );
 }
 
-export default withSuspense(LocalSearchComponent);
+export default LocalSearchComponent;

@@ -3,14 +3,13 @@ import Link from "next/link";
 import { type SearchParams } from "nuqs/server";
 import React, { Suspense } from "react";
 
+import ProductAction from "@/components/ProductAction";
 import Heading from "@/components/shared/Heading";
+import PageContainer from "@/components/shared/PageContainer";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { searchParamsCache, serialize } from "@/lib/searchparams";
 import { cn } from "@/lib/utils";
-
-import PageContainer from "@/components/shared/PageContainer";
-import ProductAction from "@/components/ProductAction";
 
 export const metadata = {
   title: "Dashboard: Quản lý sản phẩm",

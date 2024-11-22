@@ -1,7 +1,8 @@
 import React from "react";
 
-import ProductViewPage from "../_components/ProductViewPage";
 import PageContainer from "@/components/shared/PageContainer";
+
+import ProductViewPage from "../_components/ProductViewPage";
 
 export const metadata = {
   title: "Dashboard : Xem sản phẩm",

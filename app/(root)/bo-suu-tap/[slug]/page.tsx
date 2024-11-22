@@ -1,7 +1,8 @@
 import React from "react";
 
-import { dummyCollections } from "@/data/collections";
 import PageContainer from "@/components/shared/PageContainer";
+import { dummyCollections } from "@/data/collections";
+
 import CategoryViewPage from "../../../../components/shared/CategoryViewPage";
 type PageProps = { params: { slug: string } };
 

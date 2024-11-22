@@ -17,7 +17,7 @@ import NavLinks from "./NavLinks";
 const MobileNavigation = () => {
   return (
     <Sheet>
-      <SheetTrigger asChild>
+      <SheetTrigger className="md:hidden" asChild>
         <IconMenu className="text-dark-400" stroke={1.5} />
       </SheetTrigger>
       <SheetContent side="left" className="border-none bg-light-900">

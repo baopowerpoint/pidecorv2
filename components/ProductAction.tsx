@@ -6,13 +6,14 @@ import {
   SORT_OPTIONS,
   useProductAction,
 } from "@/hooks/useProductAction";
+import { cn } from "@/lib/utils";
 
 import FilterBox from "./filters/FilterBox";
 import SortBox from "./filters/SortBox";
 import { ProductResetFilter } from "./ProductResetFilter";
 import LocalSearchComponent from "./search/LocalSearch";
 
-const ProductAction = () => {
+const ProductAction = ({ otherClasses }: { otherClasses?: string }) => {
   const {
     categoriesFilter,
     setCategoriesFilter,
@@ -25,7 +26,7 @@ const ProductAction = () => {
     setSort,
   } = useProductAction();
   return (
-    <div className="my-4 flex flex-wrap items-center gap-4">
+    <div className={cn("my-4 flex flex-wrap items-center gap-4", otherClasses)}>
       <LocalSearchComponent
         placeholder="Tìm kiếm sản phẩm..."
         imgSrc="/icons/search.svg"

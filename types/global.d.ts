@@ -64,7 +64,7 @@ interface Product {
   images: string[];
   featuredImage: string;
   price: number;
-  salePrice?: number;
+  salePrice: number;
 }
 interface Blog {
   _id: string;

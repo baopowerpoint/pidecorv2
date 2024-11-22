@@ -12,7 +12,7 @@ const BlogSection = () => {
         <span className="text-primary-500"> Rèm cửa</span>
       </h1>
 
-      <div className="mt-10 flex w-full flex-col gap-6">
+      <div className="mt-10 grid w-full grid-cols-1 gap-6  xl:grid-cols-2">
         {blogs.map((blog) => (
           <BlogCard key={blog._id} blog={blog} />
         ))}

@@ -14,7 +14,7 @@ const products = [
     featuredImage:
       "https://via.placeholder.com/600x400?text=Featured+Black+Curtain",
     price: 500000,
-    salePrice: 450000,
+    salePrice: 720000,
   },
   {
     _id: "2",
@@ -48,7 +48,7 @@ const products = [
     featuredImage:
       "https://via.placeholder.com/600x400?text=Featured+White+Curtain",
     price: 300000,
-    salePrice: undefined,
+    salePrice: 720000,
   },
   {
     _id: "4",

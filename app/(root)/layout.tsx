@@ -10,7 +10,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <Navbar />
       <div className="w-full flex-col items-start  md:flex md:flex-row">
         <section className="flex min-h-screen w-full flex-1 flex-col  max-md:pb-14 ">
-          <div className="mx-auto w-full">{children}</div>
+          <div className="mx-auto mt-28 w-full">{children}</div>
           {/* <CallButton /> */}
         </section>
         <RightSidebar />

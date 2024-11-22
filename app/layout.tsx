@@ -7,7 +7,7 @@ import localFont from "next/font/local";
 import NextTopLoader from "nextjs-toploader";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
-// import "@uploadthing/react/styles.css";
+import "@uploadthing/react/styles.css";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 

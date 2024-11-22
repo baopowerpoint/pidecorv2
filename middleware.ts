@@ -1,6 +1,35 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-export default clerkMiddleware();
+const isPublicRoute = createRouteMatcher([
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/",
+  "/api/webhook(.*)",
+  "/san-pham(.*)",
+  "/don-hang(.*)",
+  "/bai-viet(.*)",
+  "/bo-suu-tap(.*)",
+  "/gio-hang(.*)",
+  "/checkout(.*)",
+  "/admin",
+  "/admin/login",
+  "/api(.*)",
+  "/:category/:slug",
+]);
+const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
+export default clerkMiddleware(async (auth, request) => {
+  if (!isPublicRoute(request)) {
+    await auth.protect();
+  }
+  if (
+    isAdminRoute(request) &&
+    (await auth()).sessionClaims?.metadata?.role !== "admin"
+  ) {
+    const url = new URL("/", request.url);
+    return NextResponse.redirect(url);
+  }
+});
 
 export const config = {
   matcher: [

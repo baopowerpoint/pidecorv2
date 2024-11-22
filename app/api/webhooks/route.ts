@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable camelcase */
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 
-import { createUser, deleteUser, updateUser } from "@/lib/actions/user.action";
+// import { createUser, deleteUser, updateUser } from "@/lib/actions/user.action";
 
 export async function POST(req: Request) {
   // TODO: add webhook secret
@@ -55,44 +56,44 @@ export async function POST(req: Request) {
 
   // Do something with the payload
   // For this guide, you simply log the payload to the console
-  const eventType = evt.type;
+  // const eventType = evt.type;
 
-  if (eventType === "user.created") {
-    const { id, image_url, username, first_name, last_name, email_addresses } =
-      evt.data;
-    // TODO: create a server action
-    const mongoUser = await createUser({
-      clerkId: id,
-      name: `${first_name} ${last_name ? `${last_name}` : ""}`,
-      username: username!,
-      email: email_addresses[0].email_address,
-      picture: image_url,
-    });
-    return NextResponse.json({ message: "ok", user: mongoUser });
-  }
-  if (eventType === "user.updated") {
-    const { id, email_addresses, image_url, username, first_name, last_name } =
-      evt.data;
-    // TODO: create a server action
-    const mongoUser = await updateUser({
-      clerkId: id,
-      updateData: {
-        name: `${first_name} ${last_name ? `${last_name}` : ""}`,
-        username: username ?? email_addresses[0].email_address.split("@")[0],
-        email: email_addresses[0].email_address,
-        picture: image_url,
-      },
-      path: `/profile/${id}`,
-    });
-    return NextResponse.json({ message: "ok", user: mongoUser });
-  }
-  if (eventType === "user.deleted") {
-    // TODO : delete user
-    const { id } = evt.data;
-    if (!id) return NextResponse.json({ message: "not found" });
-    const deletedUser = await deleteUser({ clerkId: id });
-    return NextResponse.json({ message: "deleted", user: deletedUser });
-  }
+  // if (eventType === "user.created") {
+  //   const { id, image_url, username, first_name, last_name, email_addresses } =
+  //     evt.data;
+  //   // TODO: create a server action
+  //   const mongoUser = await createUser({
+  //     clerkId: id,
+  //     name: `${first_name} ${last_name ? `${last_name}` : ""}`,
+  //     username: username!,
+  //     email: email_addresses[0].email_address,
+  //     picture: image_url,
+  //   });
+  //   return NextResponse.json({ message: "ok", user: mongoUser });
+  // }
+  // if (eventType === "user.updated") {
+  //   const { id, email_addresses, image_url, username, first_name, last_name } =
+  //     evt.data;
+  //   // TODO: create a server action
+  //   const mongoUser = await updateUser({
+  //     clerkId: id,
+  //     updateData: {
+  //       name: `${first_name} ${last_name ? `${last_name}` : ""}`,
+  //       username: username ?? email_addresses[0].email_address.split("@")[0],
+  //       email: email_addresses[0].email_address,
+  //       picture: image_url,
+  //     },
+  //     path: `/profile/${id}`,
+  //   });
+  //   return NextResponse.json({ message: "ok", user: mongoUser });
+  // }
+  // if (eventType === "user.deleted") {
+  //   // TODO : delete user
+  //   const { id } = evt.data;
+  //   if (!id) return NextResponse.json({ message: "not found" });
+  //   const deletedUser = await deleteUser({ clerkId: id });
+  //   return NextResponse.json({ message: "deleted", user: deletedUser });
+  // }
 
   return new Response("", { status: 200 });
 }

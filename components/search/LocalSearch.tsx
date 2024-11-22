@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import { Options } from "nuqs";
+import React, { useTransition } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -10,17 +11,37 @@ interface LocalSearchProps {
   imgSrc: string;
   placeholder: string;
   otherclasses?: string;
+  searchQuery: string;
+  setSearchQuery: (
+    value: string | ((old: string) => string | null) | null,
+    options?: Options | undefined
+  ) => Promise<URLSearchParams>;
+  setPage: (
+    value: number | ((old: number) => number | null) | null,
+    options?: Options | undefined
+  ) => Promise<URLSearchParams>;
 }
 
 function LocalSearchComponent({
   imgSrc,
   placeholder,
   otherclasses,
+
+  searchQuery,
+  setPage,
+  setSearchQuery,
 }: LocalSearchProps) {
+  const [isLoading, startTransition] = useTransition();
+
+  const handleSearch = (value: string) => {
+    setSearchQuery(value, { startTransition });
+    setPage(1);
+  };
+
   return (
     <div
       className={cn(
-        "background-light-800 flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ",
+        "flex items-center border border-dashed gap-4 w-full  px-4 rounded-lg",
         otherclasses
       )}
     >
@@ -34,9 +55,11 @@ function LocalSearchComponent({
       <Input
         type="text"
         placeholder={placeholder}
-        defaultValue=""
+        value={searchQuery ?? ""}
+        onChange={(e) => handleSearch(e.target.value)}
         className={cn(
-          "paragraph-regular placeholder no-focus border-none shadow-sm outline-none placeholder:text-dark-400"
+          "paragraph-regular placeholder no-focus border-none shadow-sm outline-none placeholder:text-dark-400 bg-light-900",
+          isLoading && "animate-pulse"
         )}
       />
     </div>

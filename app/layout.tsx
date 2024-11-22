@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import NextTopLoader from "nextjs-toploader";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 // import "@uploadthing/react/styles.css";
@@ -43,6 +44,7 @@ const RootLayout = async ({
     <ClerkProvider localization={viVN}>
       <html lang="en" className="custom-scrollbar">
         <body className={`${mont.className} ${pacifico.variable} antialiased`}>
+          <NextTopLoader showSpinner={true} />
           <NuqsAdapter> {children}</NuqsAdapter>
           <Toaster />
           <SpeedInsights />

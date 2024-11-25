@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import React from "react";
 
-import CategoryForm from "@/app/(admin)/admin/categories/_components/CategoryViewPage";
+import CategoryForm from "./CategoryForm";
 
 type TCategoryViewPageProps = {
   categoryId: string;

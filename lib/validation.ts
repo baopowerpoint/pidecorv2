@@ -142,3 +142,27 @@ export const ProductFormSchema = z.object({
     .min(1, { message: "Cần ít nhất 1 ảnh" })
     .max(5, { message: "Không được quá 5 ảnh" }),
 });
+export const BrandFormSchema = z.object({
+  name: z.string().min(1, { message: "Tên không được để trống" }),
+  image: z
+    .array(z.string().url({ message: "Ảnh không hợp lệ" }))
+    .max(1, {
+      message: "Chỉ được tối đa 1 ảnh",
+    })
+    .min(1, { message: "Cần ít nhất 1 ảnh" }),
+  description: z.string().min(1, { message: "Mô tả không được để trống" }),
+});
+export const CategoryFormSchema = z.object({
+  name: z.string().min(1, { message: "Tên không được để trống" }),
+  image: z.array(z.string().url({ message: "Ảnh không hợp lệ" })).max(1, {
+    message: "Chỉ được tối đa 1 ảnh",
+  }),
+  description: z.string().min(1, { message: "Mô tả không được để trống" }),
+});
+export const CollectionFormSchema = z.object({
+  name: z.string().min(1, { message: "Tên không được để trống" }),
+  image: z.array(z.string().url({ message: "Ảnh không hợp lệ" })).max(1, {
+    message: "Chỉ được tối đa 1 ảnh",
+  }),
+  description: z.string().min(1, { message: "Mô tả không được để trống" }),
+});

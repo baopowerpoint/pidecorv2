@@ -18,7 +18,8 @@ export default async function BrandViewPage({ brandId }: TBrandViewPageProps) {
     brand = JSON.parse(data);
 
     pageTitle = "Chỉnh sửa nhãn hiệu";
+    return <BrandForm type="edit" pageTitle={pageTitle} initialData={brand} />;
   }
 
-  return <BrandForm pageTitle={pageTitle} initialData={brand} />;
+  return <BrandForm type="create" pageTitle={pageTitle} />;
 }

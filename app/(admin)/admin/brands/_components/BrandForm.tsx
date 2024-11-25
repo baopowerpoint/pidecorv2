@@ -63,7 +63,7 @@ const BrandForm = ({
   type,
 }: {
   pageTitle: string;
-  initialData: Brand | null;
+  initialData?: Brand | null;
   type: "create" | "edit";
 }) => {
   const router = useRouter();

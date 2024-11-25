@@ -6,7 +6,9 @@ import CategoryForm from "./CategoryForm";
 type TCategoryViewPageProps = {
   categoryId: string;
 };
-const CategoryViewPage = ({ categoryId }: TCategoryViewPageProps) => {
+export default async function CategoryViewPage({
+  categoryId,
+}: TCategoryViewPageProps) {
   const category = null;
   let pageTitle = "Tạo mới danh mục";
 
@@ -16,9 +18,8 @@ const CategoryViewPage = ({ categoryId }: TCategoryViewPageProps) => {
       notFound();
     }
     pageTitle = "Chỉnh sửa danh mục";
+    return <CategoryForm pageTitle={pageTitle} type="edit" />;
   }
 
-  return <CategoryForm pageTitle={pageTitle} initialData={category} />;
-};
-
-export default CategoryViewPage;
+  return <CategoryForm pageTitle={pageTitle} type="create" />;
+}

@@ -53,9 +53,11 @@ const FormInput = ({
 const CategoryForm = ({
   pageTitle,
   initialData,
+  type,
 }: {
   pageTitle: string;
   initialData?: null;
+  type: "create" | "edit";
 }) => {
   const defaultValues = {
     name: "",

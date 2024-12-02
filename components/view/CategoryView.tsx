@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React from "react";
 
-import products from "@/data/mock";
 import { Collection } from "@/types/global";
 
 import ProductCard from "../cards/ProductCard";
@@ -28,26 +27,19 @@ export default function CategoryView({ initialData }: TCategoryViewProps) {
         <h2 className="mb-3 mt-5 text-xl font-semibold">
           Những sản phẩm thuộc bộ sưu tập này
         </h2>
-        {products.length !== 0 ? (
-          <div className=" grid w-full grid-cols-1 gap-4 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 min-[1080px]:grid-cols-3 xl:grid-cols-4">
-            {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-        ) : (
-          <div className="flex w-full flex-col items-center justify-center">
-            <Image
-              alt="not found"
-              className="w-full max-w-xl"
-              height={500}
-              src="/svgs/no_data_light.svg"
-              width={500}
-            />
-            <h3 className="text-center text-2xl font-semibold text-primary">
-              Chưa có sản phẩm nào trong bộ sưu tập này!
-            </h3>
-          </div>
-        )}
+
+        <div className="flex w-full flex-col items-center justify-center">
+          <Image
+            alt="not found"
+            className="w-full max-w-xl"
+            height={500}
+            src="/svgs/no_data_light.svg"
+            width={500}
+          />
+          <h3 className="text-center text-2xl font-semibold text-primary">
+            Chưa có sản phẩm nào trong bộ sưu tập này!
+          </h3>
+        </div>
       </div>
     </div>
   );

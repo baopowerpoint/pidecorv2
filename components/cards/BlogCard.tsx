@@ -16,7 +16,7 @@ const BlogCard = ({
     _id,
     title,
     author,
-
+    description,
     createdAt,
 
     likes,

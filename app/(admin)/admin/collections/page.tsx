@@ -7,6 +7,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
+import CollectionListingPage from "./_components/CollectionListingPage";
+
 export const metadata = {
   title: "Dashboard: Quản lý bộ sưu tập",
 };
@@ -21,14 +23,14 @@ export default async function Page() {
             description="Quản lý Bộ sưu tập"
           />
           <Link
-            href="/admin/categories/create"
+            href="/admin/collections/create"
             className={cn(buttonVariants(), " text-xs md:text-sm")}
           >
             Tạo mới
           </Link>
         </div>
         <Separator />
-        <div>Bộ sưu tập</div>
+        <CollectionListingPage />
       </div>
     </PageContainer>
   );

@@ -21,6 +21,14 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "components/view/ProductView.mdx",
+    "app/(root)/san-pham/[slug]/page.mdx",
+    "lib/post.js"
+  ],
   "exclude": ["node_modules"]
 }

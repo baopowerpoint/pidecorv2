@@ -40,6 +40,6 @@ const CartSchema = new Schema<ICart>(
   { timestamps: true }
 );
 
-const Cart = models.Cart || model<ICart>("Cart", CartSchema);
+const Cart = models?.Cart || model<ICart>("Cart", CartSchema);
 
 export default Cart;

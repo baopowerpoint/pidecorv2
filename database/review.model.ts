@@ -18,5 +18,5 @@ const ReviewSchema = new Schema<IReview>({
   isApproved: { type: Boolean, default: false },
 });
 
-const Review = models.Review || model<IReview>("Review", ReviewSchema);
+const Review = models?.Review || model<IReview>("Review", ReviewSchema);
 export default Review;

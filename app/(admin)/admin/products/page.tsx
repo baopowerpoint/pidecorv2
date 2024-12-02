@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { type SearchParams } from "nuqs/server";
-import React, { Suspense } from "react";
+import React from "react";
 
 import ProductAction from "@/components/ProductAction";
 import Heading from "@/components/shared/Heading";
@@ -10,6 +10,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { searchParamsCache, serialize } from "@/lib/searchparams";
 import { cn } from "@/lib/utils";
+
+import ProductListingPage from "./_components/ProductListingPage";
 
 export const metadata = {
   title: "Dashboard: Quản lý sản phẩm",
@@ -36,9 +38,7 @@ export default async function Page({ searchParams }: PageProps) {
         </div>
         <Separator />
         <ProductAction />
-        <Suspense key={key} fallback={<p>loading...</p>}>
-          <p>{sp.q}</p>
-        </Suspense>
+        <ProductListingPage />
       </div>
     </PageContainer>
   );

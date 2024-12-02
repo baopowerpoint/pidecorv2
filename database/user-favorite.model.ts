@@ -11,6 +11,6 @@ const UserFavoriteSchema = new Schema<IUserFavorite>({
 });
 
 const UserFavorite =
-  models.UserFavorite ||
+  models?.UserFavorite ||
   model<IUserFavorite>("UserFavorite", UserFavoriteSchema);
 export default UserFavorite;

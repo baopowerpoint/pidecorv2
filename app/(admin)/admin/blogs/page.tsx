@@ -7,6 +7,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
+import BlogListingPage from "./_components/BlogListingPage";
+
 export const metadata = {
   title: "Dashboard: Quản lý bài viết",
 };
@@ -18,14 +20,14 @@ export default async function Page() {
         <div className="flex items-start justify-between">
           <Heading title="Quản lý Bài viết" description="Quản lý Bài viết" />
           <Link
-            href="/admin/categories/create"
+            href="/admin/blogs/create"
             className={cn(buttonVariants(), " text-xs md:text-sm")}
           >
             Tạo mới
           </Link>
         </div>
         <Separator />
-        <div>Bài viết</div>
+        <BlogListingPage />
       </div>
     </PageContainer>
   );

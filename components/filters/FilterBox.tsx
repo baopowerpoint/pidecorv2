@@ -21,15 +21,15 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Separator } from "../ui/separator";
 
-interface FilterOption {
-  value: string;
-  label: string;
-  _id?: string;
+interface CategoryOption {
+  name: string;
+
+  _id: string;
 }
 interface FilterBoxProps {
   filterKey: string;
   title: string;
-  options: FilterOption[];
+  options: CategoryOption[];
   setFilterValue: (
     value: string | ((old: string) => string | null) | null,
     options?: Options | undefined
@@ -83,14 +83,14 @@ const FilterBox = ({
                       {selectedValuesSet.size} selected
                     </Badge>
                   ) : (
-                    Array.from(selectedValuesSet).map((value) => (
+                    Array.from(selectedValuesSet).map((name) => (
                       <Badge
                         variant="secondary"
-                        key={value}
+                        key={name}
                         className="rounded-sm px-1 font-normal"
                       >
-                        {options.find((option) => option.value === value)
-                          ?.label || value}
+                        {options.find((option) => option._id === name)?.name ||
+                          name}
                       </Badge>
                     ))
                   )}
@@ -107,13 +107,13 @@ const FilterBox = ({
               <CommandGroup>
                 {options.map((option) => (
                   <CommandItem
-                    key={option.value}
-                    onSelect={() => handleSelect(option.value)}
+                    key={option._id}
+                    onSelect={() => handleSelect(option._id)}
                   >
                     <div
                       className={cn(
                         "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                        selectedValuesSet.has(option.value)
+                        selectedValuesSet.has(option._id)
                           ? "bg-primary text-primary-foreground"
                           : "opacity-50 [&_svg]:invisible"
                       )}
@@ -121,7 +121,7 @@ const FilterBox = ({
                       <CheckIcon className="size-4" aria-hidden="true" />
                     </div>
 
-                    <span>{option.label}</span>
+                    <span>{option.name}</span>
                   </CommandItem>
                 ))}
               </CommandGroup>

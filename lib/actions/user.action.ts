@@ -49,3 +49,12 @@ export async function deleteUser(params: DeleteUserParams) {
     return handleError(error) as APIErrorResponse;
   }
 }
+export async function getAllUsers() {
+  try {
+    await dbConnect();
+    const users = await User.find();
+    return JSON.stringify(users);
+  } catch (error) {
+    return handleError(error) as APIErrorResponse;
+  }
+}

@@ -57,20 +57,32 @@ const data = {
           url: "/admin/collections",
         },
         {
-          title: "Quản lý đơn hàng",
-          url: "/admin/orders",
+          title: "Quản lý chất liệu",
+          url: "/admin/materials",
+        },
+        {
+          title: "Quản lý màu",
+          url: "/admin/colors",
+        },
+        {
+          title: "Quản lý thẻ",
+          url: "/admin/tags",
         },
         {
           title: "Quản lý người dùng",
           url: "/admin/users",
         },
         {
+          title: "Quản lý bài viết",
+          url: "/admin/blogs",
+        },
+        {
           title: "Quản lý review",
           url: "/admin/reviews",
         },
         {
-          title: "Quản lý bài viết",
-          url: "/admin/blogs",
+          title: "Quản lý đơn hàng",
+          url: "/admin/orders",
         },
         {
           title: "Quản lý trang",
@@ -107,7 +119,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.url === pathname}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.includes(item.url)}
+                    >
                       <Link href={item.url}>{item.title}</Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

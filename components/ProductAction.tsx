@@ -1,19 +1,22 @@
 "use client";
 import React from "react";
 
-import {
-  CATEGORY_OPTIONS,
-  SORT_OPTIONS,
-  useProductAction,
-} from "@/hooks/useProductAction";
+import { SORT_OPTIONS, useProductAction } from "@/hooks/useProductAction";
 import { cn } from "@/lib/utils";
+import { Category } from "@/types/global";
 
 import FilterBox from "./filters/FilterBox";
 import SortBox from "./filters/SortBox";
 import { ProductResetFilter } from "./ProductResetFilter";
 import LocalSearchComponent from "./search/LocalSearch";
 
-const ProductAction = ({ otherClasses }: { otherClasses?: string }) => {
+const ProductAction = ({
+  categoryOptions,
+  otherClasses,
+}: {
+  otherClasses?: string;
+  categoryOptions?: Category[];
+}) => {
   const {
     categoriesFilter,
     setCategoriesFilter,
@@ -25,6 +28,7 @@ const ProductAction = ({ otherClasses }: { otherClasses?: string }) => {
     sort,
     setSort,
   } = useProductAction();
+
   return (
     <div className={cn("my-4 flex flex-wrap items-center gap-4", otherClasses)}>
       <LocalSearchComponent
@@ -40,7 +44,7 @@ const ProductAction = ({ otherClasses }: { otherClasses?: string }) => {
         title="Danh mục"
         setFilterValue={setCategoriesFilter}
         filterValue={categoriesFilter}
-        options={CATEGORY_OPTIONS}
+        options={categoryOptions || []}
       />
       <SortBox
         sortKey="sort"

@@ -14,10 +14,11 @@ import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
 
-// Định nghĩa kiểu cho các cột
-interface TableColumn<T> {
+interface ColumnDef<T> {
+  accessorKey?: keyof T;
   header: string;
-  accessor: keyof T; // Sử dụng keyof T để lấy key của T làm tên cột
+  cell?: (props: { row: T }) => React.ReactNode;
+  id?: string;
 }
 
 // Định nghĩa kiểu cho các hành động
@@ -29,7 +30,7 @@ interface TableAction<T> {
 // Cập nhật kiểu generic cho props của DataTable
 interface TableProps<T> {
   caption: string;
-  columns: TableColumn<T>[];
+  columns: ColumnDef<T>[];
   data: T[]; // Dữ liệu sẽ là mảng các phần tử kiểu T
   actions?: TableAction<T>[]; // Các hành động có thể thực hiện trên mỗi dòng
 }
@@ -46,9 +47,7 @@ const DataTable = <T,>({
       <TableHeader>
         <TableRow>
           {columns.map((column) => (
-            <TableHead key={column.accessor as string}>
-              {column.header}
-            </TableHead>
+            <TableHead key={column.header as string}>{column.header}</TableHead>
           ))}
           {actions.length > 0 && (
             <TableHead className="text-right">Hành động</TableHead>
@@ -59,9 +58,12 @@ const DataTable = <T,>({
         {data.map((row, index) => (
           <TableRow key={index}>
             {columns.map((column) => (
-              <TableCell key={column.accessor as string}>
-                {/* Ép kiểu row[column.accessor] sang ReactNode */}
-                {row[column.accessor] as React.ReactNode}
+              <TableCell key={column.header as string}>
+                {/* Nếu có cell render function, gọi hàm đó */}
+                {column.cell
+                  ? column.cell({ row })
+                  : // Nếu không có, lấy giá trị từ accessorKey
+                    (row[column.accessorKey as keyof T] as React.ReactNode)}
               </TableCell>
             ))}
             {actions.length > 0 && (

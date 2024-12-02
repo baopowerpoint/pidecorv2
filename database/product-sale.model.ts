@@ -22,6 +22,6 @@ const ProductSaleSchema = new Schema<IProductSale>(
 );
 
 const ProductSale =
-  models.ProductSale || model("ProductSale", ProductSaleSchema);
+  models?.ProductSale || model("ProductSale", ProductSaleSchema);
 
 export default ProductSale;

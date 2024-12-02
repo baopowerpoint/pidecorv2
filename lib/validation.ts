@@ -110,26 +110,25 @@ export const ProductFormSchema = z.object({
   content: z.string(),
   price: z.coerce.number(),
   salePrice: z.coerce.number(),
-  quantity: z.coerce.number(),
+  stock: z.coerce.number(),
+  collection: z.string(),
   category: z.string(),
   brand: z.string(),
   material: z.string(),
-  tags: z
+  specs: z
     .array(
-      z
-        .string()
-        .min(1, { message: "Thẻ không được để trống" })
-        .max(20, { message: "Thẻ không được quá 20 ký tự" })
+      z.object({
+        name: z.string().min(1, { message: "Name is required" }),
+        value: z.string().min(1, { message: "Value is required" }),
+      })
     )
+    .optional(),
+  tags: z
+    .array(z.string())
     .min(1, { message: "Cần ít nhất 1 thẻ" })
     .max(3, { message: "Không được quá 3 thẻ" }),
   colors: z
-    .array(
-      z
-        .string()
-        .min(1, { message: "Màu không được để trống" })
-        .max(7, { message: "Màu không được quá 7 ký tự" })
-    )
+    .array(z.string())
     .min(1, { message: "Cần ít nhất 1 màu" })
     .max(5, { message: "Không được quá 5 màu" }),
   images: z
@@ -154,15 +153,47 @@ export const BrandFormSchema = z.object({
 });
 export const CategoryFormSchema = z.object({
   name: z.string().min(1, { message: "Tên không được để trống" }),
-  image: z.array(z.string().url({ message: "Ảnh không hợp lệ" })).max(1, {
-    message: "Chỉ được tối đa 1 ảnh",
-  }),
+  image: z
+    .array(z.string().url({ message: "Ảnh không hợp lệ" }))
+    .max(1, {
+      message: "Chỉ được tối đa 1 ảnh",
+    })
+    .min(1, { message: "Cần ít nhất 1 ảnh" }),
   description: z.string().min(1, { message: "Mô tả không được để trống" }),
 });
 export const CollectionFormSchema = z.object({
   name: z.string().min(1, { message: "Tên không được để trống" }),
-  image: z.array(z.string().url({ message: "Ảnh không hợp lệ" })).max(1, {
-    message: "Chỉ được tối đa 1 ảnh",
-  }),
+  category: z.string(),
+  image: z
+    .array(z.string().url({ message: "Ảnh không hợp lệ" }))
+    .max(1, {
+      message: "Chỉ được tối đa 1 ảnh",
+    })
+    .min(1, { message: "Cần ít nhất 1 ảnh" }),
   description: z.string().min(1, { message: "Mô tả không được để trống" }),
+});
+export const MaterialFormSchema = z.object({
+  name: z.string().min(1, { message: "Tên không được để trống" }),
+  image: z
+    .array(z.string().url({ message: "Ảnh không hợp lệ" }))
+    .max(1, {
+      message: "Chỉ được tối đa 1 ảnh",
+    })
+    .min(1, { message: "Cần ít nhất 1 ảnh" }),
+  description: z.string().min(1, { message: "Mô tả không được để trống" }),
+});
+export const BlogFormSchema = z.object({
+  title: z.string().min(1, { message: "Tiêu đề không được để trống" }),
+  content: z.string().min(1, { message: "Nội dung không được để trống" }),
+  description: z.string().min(1, { message: "Mô tả không được để trống" }),
+  tags: z
+    .array(z.string())
+    .min(1, { message: "Cần ít nhất 1 thẻ" })
+    .max(3, { message: "Không được quá 3 thẻ" }),
+  thumbnail: z
+    .array(z.string().url({ message: "Ảnh không hợp lệ" }))
+    .max(1, {
+      message: "Chỉ được tối đa 1 ảnh",
+    })
+    .min(1, { message: "Cần ít nhất 1 ảnh" }),
 });

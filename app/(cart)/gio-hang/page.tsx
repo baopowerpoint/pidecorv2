@@ -2,11 +2,8 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-import CartCard from "@/components/cards/CartCard";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import products from "@/data/mock";
-import { Product } from "@/types/global";
 import CartTotal from "@/components/CartTotal";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const CartPage = () => {
   return (
@@ -25,11 +22,11 @@ const CartPage = () => {
       </div>
       <div className="flex h-[full] flex-col justify-start gap-5 md:h-screen md:flex-row md:items-center md:justify-center">
         <ScrollArea className="custom-scrollbar h-[350px]">
-          <div className="flex w-full flex-col gap-4 ">
+          {/* <div className="flex w-full flex-col gap-4 ">
             {products.map((product: Product) => (
               <CartCard product={product} key={product._id} />
             ))}
-          </div>
+          </div> */}
         </ScrollArea>
         <div>
           <CartTotal />

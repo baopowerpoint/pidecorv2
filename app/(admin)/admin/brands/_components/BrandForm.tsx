@@ -148,7 +148,6 @@ const BrandForm = ({
                           )
                         }
                         onUploadComplete={(urls) => field.onChange(urls)}
-                        onUploading={() => {}}
                       />
                       <FormMessage />
                     </div>

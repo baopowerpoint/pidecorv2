@@ -1,16 +1,38 @@
+/* eslint-disable no-use-before-define */
+import { IBlog } from "@/database/blog.model";
+
 interface Author {
   _id: string;
   name: string;
   image: string;
+}
+interface ShippingAddress {
+  province: string;
+  district: string;
+  ward: string;
+  detail: string;
 }
 interface Tag {
   _id: string;
   name: string;
 }
 
+interface CollectionBlog {
+  _id: string;
+  collectionId: Collection;
+  blogId: Blog;
+}
+interface CategoryBlog {
+  _id: string;
+  categoryId: Category;
+  blogId: Blog;
+}
 interface Material {
   _id: string;
   name: string;
+  description: string;
+  image: string;
+  products: number;
 }
 
 interface Pattern {
@@ -25,25 +47,42 @@ interface Brand {
   image: string;
   products: number;
 }
-
-interface Category {
-  _id: string;
-  name: string;
-}
-
 interface Collection {
   _id: string;
   description: string;
+  slug: string;
+  category: string;
   featured: boolean;
   image: string;
   name: string;
   products: number;
 }
+interface Category {
+  _id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image: string;
+  collections: Collection[];
+  products: number;
+}
+
+interface User {
+  _id: string;
+  clerkId: string;
+  name: string;
+  username: string;
+  email: string;
+  role: string;
+  likes: number;
+  shippingAddress: ShippingAddress | null;
+  picture: string;
+}
 
 interface Color {
   _id: string;
-  name: string;
-  hexCode: string; // Ví dụ nếu có mã màu
+  products: number;
+  hex: string; // Ví dụ nếu có mã màu
 }
 
 interface Dimensions {
@@ -66,20 +105,31 @@ interface Product {
   content: string;
   images: string[];
   featuredImage: string;
+  sku: string;
   price: number;
+  stock: number;
+  specs?: {
+    name: string;
+    value: string;
+  }[];
   salePrice: number;
+  categoryId: Category;
+  brandId: Brand;
+  materialId: Material;
+  collectionId: Collection;
+  colors: Color[];
+  tags: Tag[];
 }
-interface Blog {
+interface Blog extends Partial<IBlog> {
   _id: string;
   title: string;
+  description: string;
+  content: string;
   author: Author;
-
+  thumbnail: string;
   createdAt: Date;
-
   likes: number;
-
   tags: Tag[];
-
   views: number;
 }
 type ActionResponse<T = null> = {

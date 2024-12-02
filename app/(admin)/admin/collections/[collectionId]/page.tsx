@@ -2,10 +2,10 @@ import React from "react";
 
 import PageContainer from "@/components/shared/PageContainer";
 
-import CollectionViewPage from "./_components/CollectionViewPage";
+import CollectionViewPage from "../_components/CollectionViewPage";
 
 export const metadata = {
-  title: "Dashboard : Tạo mói danh mục",
+  title: "Dashboard : Tạo mói bộ sưu tập",
 };
 
 type PageProps = { params: { collectionId: string } };

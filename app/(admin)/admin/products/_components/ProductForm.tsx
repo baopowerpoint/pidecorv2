@@ -1,228 +1,109 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MDXEditorMethods } from "@mdxeditor/editor";
+import { IconLoader, IconPlus, IconTrash } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import React, { useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import React, { useRef, useCallback, useMemo, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import ImageUploader from "@/components/admin/ImageUploader";
-import TagCard from "@/components/cards/TagCard";
+import { FormInput } from "@/components/forms/FormInput";
+import { FormSelect } from "@/components/forms/FormSelect";
+import { TagInput } from "@/components/forms/TagInput";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { createProduct, editProduct } from "@/lib/actions/product.action";
+import logger from "@/lib/logger";
 import { ProductFormSchema } from "@/lib/validation";
+import { Product } from "@/types/global";
 
-const Editor = dynamic(() => import("@/components/editors"), {
-  ssr: false,
-});
-const selectOptions = {
-  category: [
-    { value: "beauty", label: "Beauty Products" },
-    { value: "electronics", label: "Electronics" },
-    { value: "clothing", label: "Clothing" },
-    { value: "home", label: "Home & Garden" },
-    { value: "sports", label: "Sports & Outdoors" },
-  ],
-  material: [
-    { value: "wood", label: "Wood" },
-    { value: "metal", label: "Metal" },
-    { value: "plastic", label: "Plastic" },
-  ],
-};
-const FormSelect = ({
-  name,
-  label,
-  placeholder,
-  options,
-  form,
-}: {
-  name: string;
-  label: string;
-  placeholder: string;
-  options: { value: string; label: string }[];
-  form: any;
-}) => (
-  <FormField
-    control={form.control}
-    name={name}
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>{label}</FormLabel>
-        <Select onValueChange={field.onChange} value={field.value || ""}>
-          <FormControl>
-            <SelectTrigger className="paragraph-regular light-border-2 no-focus min-h-[20px] border bg-light-800 text-dark-300">
-              <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            {options.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
-);
-const FormInput = ({
-  name,
-  label,
-  placeholder,
-  type = "text",
-  form,
-}: {
-  name: string;
-  label: string;
-  placeholder: string;
-  type?: string;
-  form: any;
-}) => (
-  <FormField
-    control={form.control}
-    name={name}
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>{label}</FormLabel>
-        <FormControl>
-          <Input
-            type={type}
-            placeholder={placeholder}
-            {...field}
-            className="paragraph-regular light-border-2 no-focus min-h-[20px] border bg-light-800 text-dark-300"
-          />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
-);
+const Editor = dynamic(() => import("@/components/editors"), { ssr: false });
 
-const TagInput = ({
-  name,
-  label,
-  maxLength,
-  maxItems,
-  placeholder,
-  form,
-}: {
-  name: "tags" | "colors";
-  label: string;
-  maxLength: number;
-  maxItems: number;
-  placeholder: string;
-  form: any;
-}) => (
-  <FormField
-    control={form.control}
-    name={name}
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>{label}</FormLabel>
-        <FormControl>
-          <div>
-            <Input
-              placeholder={placeholder}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  const value = e.currentTarget.value.trim();
-                  if (value.length > maxLength) {
-                    form.setError(name, {
-                      message: `Không được dài hơn ${maxLength} ký tự.`,
-                    });
-                  } else if (field.value.includes(value)) {
-                    form.setError(name, {
-                      message: `${label} đã tồn tại.`,
-                    });
-                  } else if (field.value.length < maxItems) {
-                    form.setValue(name, [...field.value, value]);
-                    e.currentTarget.value = "";
-                  } else {
-                    form.setError(name, {
-                      message: `Tối đa ${maxItems} ${label.toLowerCase()}.`,
-                    });
-                  }
-                }
-              }}
-              className="paragraph-regular light-border-2 no-focus min-h-[20px] border bg-light-800 text-dark-300"
-            />
-            <div className="mt-2 flex flex-wrap gap-2">
-              {field.value.map((item: string) => (
-                <TagCard
-                  key={item}
-                  _id={item}
-                  name={item}
-                  compact
-                  remove
-                  isButton
-                  handleRemove={() =>
-                    form.setValue(
-                      name,
-                      field.value.filter((i: string) => i !== item)
-                    )
-                  }
-                />
-              ))}
-            </div>
-          </div>
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
-);
 const ProductForm = ({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  initialData,
   pageTitle,
+  categoryData,
+  collectionData,
+  materialData,
+  brandData,
+  initialData,
+  type,
 }: {
-  initialData: null;
+  initialData?: Product | null;
+  categoryData: Selection[];
+  collectionData: Selection[];
+  brandData: Selection[];
+  materialData: Selection[];
   pageTitle: string;
+  type: "create" | "edit";
 }) => {
-  const editorRef = useRef<MDXEditorMethods>(null);
-  const defaultValues = {
-    title: "",
-    description: "",
-    content: "",
-    price: 0,
-    salePrice: 0,
-    quantity: 0,
-    category: "",
-    brand: "",
-    tags: [],
-    colors: [],
-    material: "",
-    images: [],
-  };
+  const editorRef = useRef<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const defaultValues = useMemo(
+    () => ({
+      title: initialData?.title || "",
+      description: initialData?.description || "",
+      content: initialData?.content || "",
+      price: initialData?.price || 0,
+      salePrice: initialData?.salePrice || 0,
+      stock: initialData?.stock || 0,
+      category: initialData?.categoryId.toString() || "",
+      collection: initialData?.collectionId.toString() || "",
+      brand: initialData?.brandId.toString() || "",
+      tags: initialData?.tags.map((tag) => tag.toString()) || [],
+      colors: initialData?.colors?.map((color) => color.toString()) || [],
+      material: initialData?.materialId?.toString() || "",
+      images: initialData?.images || [],
+      specs: initialData?.specs?.map((spec) => ({
+        name: spec.name,
+        value: spec.value,
+      })) || [{ name: "", value: "" }],
+    }),
+    []
+  );
 
   const form = useForm<z.infer<typeof ProductFormSchema>>({
     resolver: zodResolver(ProductFormSchema),
-    values: defaultValues,
+    defaultValues,
   });
 
-  const handleCreateProduct = (data: z.infer<typeof ProductFormSchema>) => {
-    console.log(data);
-  };
+  const { fields, append, remove } = useFieldArray({
+    name: "specs",
+    control: form.control,
+  });
+  const handleSubmit = useCallback(
+    async (data: z.infer<typeof ProductFormSchema>) => {
+      console.log(initialData);
+      try {
+        setLoading(true);
+        if (type === "create") {
+          await createProduct(data);
+          toast.success("Sản phẩm đã được thêm thành công");
+        } else {
+          if (initialData) {
+            console.log("ok");
+            await editProduct({
+              productId: initialData._id,
+              updateData: data,
+              path: "/admin/products",
+            });
+            toast.success("Sản phẩm đã được sửa thành công");
+          }
+        }
+      } catch (error) {
+        logger.error(error);
+        toast.error("Có lỗi xảy ra khi thêm sản phẩm");
+      } finally {
+        setLoading(false);
+        router.push("/admin/products");
+      }
+    },
+    [type, initialData, router]
+  );
 
   return (
     <Card className="mx-auto w-full">
@@ -232,7 +113,7 @@ const ProductForm = ({
       <CardContent>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(handleCreateProduct)}
+            onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-8"
           >
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -263,7 +144,7 @@ const ProductForm = ({
                 form={form}
               />
               <FormInput
-                name="quantity"
+                name="stock"
                 label="Số lượng"
                 placeholder="Nhập số lượng"
                 type="number"
@@ -273,91 +154,131 @@ const ProductForm = ({
                 name="collection"
                 label="Bộ sưu tập"
                 placeholder="Chọn bộ sưu tập"
-                options={selectOptions.category}
+                options={collectionData}
                 form={form}
               />
               <FormSelect
                 name="category"
                 label="Danh mục"
                 placeholder="Chọn danh mục"
-                options={selectOptions.category}
+                options={categoryData}
                 form={form}
               />
               <FormSelect
                 name="brand"
                 label="Nhãn hiệu"
                 placeholder="Chọn nhãn hiệu"
-                options={selectOptions.category}
+                options={brandData}
                 form={form}
               />
               <FormSelect
                 name="material"
                 label="Chất liệu"
                 placeholder="Chọn chất liệu"
-                options={selectOptions.material}
+                options={materialData}
                 form={form}
               />
+              {type !== "edit" && (
+                <>
+                  <TagInput
+                    name="tags"
+                    label="Thẻ"
+                    maxLength={15}
+                    maxItems={3}
+                    placeholder="Thêm thẻ..."
+                    form={form}
+                  />
+                  <TagInput
+                    name="colors"
+                    label="Màu"
+                    maxLength={7}
+                    maxItems={5}
+                    placeholder="Thêm màu..."
+                    form={form}
+                  />
+                </>
+              )}
 
-              <TagInput
-                name="tags"
-                label="Thẻ"
-                maxLength={15}
-                maxItems={3}
-                placeholder="Thêm thẻ..."
-                form={form}
-              />
-              <TagInput
-                name="colors"
-                label="Màu"
-                maxLength={7}
-                maxItems={5}
-                placeholder="Thêm màu..."
-                form={form}
-              />
+              <div className="row-span-2">
+                <label className="small-semibold">Thông số kỹ thuật</label>
+                <div className="flex flex-col gap-5">
+                  {fields.map((item, index) => (
+                    <div key={item.id} className="flex items-center gap-4">
+                      <FormInput
+                        otherClassName="flex-1 w-full"
+                        name={`specs.${index}.name`}
+                        label="Tên thông số"
+                        placeholder="Nhập tên thông số"
+                        form={form}
+                      />
+                      <FormInput
+                        otherClassName="flex-1 w-full"
+                        name={`specs.${index}.value`}
+                        label="Giá trị"
+                        placeholder="Nhập giá trị"
+                        form={form}
+                      />
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => remove(index)}
+                        className="flex flex-col justify-end text-red-500"
+                      >
+                        <IconTrash />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => append({ name: "", value: "" })}
+                  className="text-primary-500 "
+                >
+                  <IconPlus />
+                </Button>
+              </div>
               <FormField
                 control={form.control}
                 name="images"
                 render={({ field }) => (
-                  <div className="col-span-full">
-                    <ImageUploader
-                      imgUrls={field.value}
-                      type="multiple"
-                      onRemoveImage={(url) =>
-                        field.onChange(
-                          field.value.filter((img: string) => img !== url)
-                        )
-                      }
-                      onUploadComplete={(urls) =>
-                        field.onChange([...field.value, ...urls])
-                      }
-                      onUploading={() => {}}
-                    />
-                  </div>
+                  <ImageUploader
+                    imgUrls={field.value}
+                    type="multiple"
+                    onRemoveImage={(url) =>
+                      field.onChange(
+                        field.value.filter((img: string) => img !== url)
+                      )
+                    }
+                    onUploadComplete={(urls) =>
+                      field.onChange([...field.value, ...urls])
+                    }
+                  />
                 )}
               />
               <FormField
                 control={form.control}
                 name="content"
                 render={({ field }) => (
-                  <FormItem className="col-span-full flex w-full flex-col">
-                    <FormLabel className="paragraph-semibold text-dark-400">
-                      Nội dung
-                      <span className="text-primary-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Editor
-                        editorRef={editorRef}
-                        value={field.value}
-                        fieldChange={field.onChange}
-                      />
-                    </FormControl>
-
+                  <FormItem className="col-span-full">
+                    <Editor
+                      editorRef={editorRef}
+                      value={field.value}
+                      fieldChange={field.onChange}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <Button type="submit">Thêm sản phẩm</Button>
+            <Button type="submit" disabled={loading}>
+              {loading && (
+                <IconLoader className="w-6 animate-spin text-white" />
+              )}
+              {type === "create" ? "Thêm sản phẩm" : "Sửa sản phẩm"}
+            </Button>
           </form>
         </Form>
       </CardContent>
@@ -365,4 +286,4 @@ const ProductForm = ({
   );
 };
 
-export default ProductForm;
+export default React.memo(ProductForm);

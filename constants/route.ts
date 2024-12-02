@@ -7,5 +7,6 @@ const ROUTES = {
   PRODUCT: (slug: string) => `/san-pham/${slug}`,
   QUESTION: (id: string) => `/question/${id}`,
   TAGS: (id: string) => `/tags/${id}`,
+  CATEGORY: (slug: string) => `/danh-muc/${slug}`,
 };
 export default ROUTES;

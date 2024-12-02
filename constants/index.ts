@@ -5,6 +5,11 @@ export const sidebarLinks = [
     label: "Trang chủ",
   },
   {
+    imgURL: "/icons/home.svg",
+    route: "/danh-muc",
+    label: "Danh mục",
+  },
+  {
     imgURL: "/icons/users.svg",
     route: "/bo-suu-tap",
     label: "Bộ sưu tập",

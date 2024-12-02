@@ -12,7 +12,7 @@ import { Button } from "../ui/button";
 interface Props {
   type: "multiple" | "single";
   onUploadComplete: (urls: string[]) => void;
-  onUploading: (status: boolean) => void;
+
   onRemoveImage: (url: string) => void;
   imgUrls: string[];
 }
@@ -20,7 +20,7 @@ interface Props {
 const ImageUploader = ({
   type,
   onUploadComplete,
-  onUploading,
+
   onRemoveImage,
   imgUrls,
 }: Props) => {
@@ -46,15 +46,12 @@ const ImageUploader = ({
         disabled={!canUploadMore}
         endpoint="imageUploader"
         onBeforeUploadBegin={(files: File[]) => {
-          onUploading(true); // Bắt đầu upload
-
           return files;
         }}
         onClientUploadComplete={(res) => {
           const urls = res.map((file) => file.url);
 
           onUploadComplete(urls);
-          onUploading(false); // Đã upload xong
         }}
         onUploadError={(error: Error) => {
           // Do something with the error.

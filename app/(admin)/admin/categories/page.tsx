@@ -7,6 +7,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
+import CategoryListingPage from "./_components/CategoryListingPage";
+
 export const metadata = {
   title: "Dashboard: Quản lý danh mục",
 };
@@ -25,7 +27,7 @@ export default async function Page() {
           </Link>
         </div>
         <Separator />
-        <div>Danh mục</div>
+        <CategoryListingPage />
       </div>
     </PageContainer>
   );

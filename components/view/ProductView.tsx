@@ -5,9 +5,11 @@ import {
   IconRotateClockwise,
 } from "@tabler/icons-react";
 import { Phone } from "lucide-react";
+import markdownit from "markdown-it";
 import Link from "next/link";
 import React from "react";
 
+import { formatCurrency } from "@/lib/utils";
 import { Product } from "@/types/global";
 
 import Accordions from "../Accordions";
@@ -89,6 +91,12 @@ const items = [
   },
 ];
 export default function ProductView({ initialData }: TProductViewProps) {
+  const md = markdownit({
+    html: true,
+    breaks: true,
+    linkify: true,
+  });
+  const parsedContent = md.render(initialData.content || "");
   return (
     <main className="relative  min-h-screen gap-5  gap-x-4 px-3 md:grid md:grid-cols-7">
       <div className="col-span-full self-start md:sticky md:top-28 md:col-span-3">
@@ -105,9 +113,18 @@ export default function ProductView({ initialData }: TProductViewProps) {
             Đã bán 100
           </Badge>
           <span>|</span>
-          <p className="subtle-medium text-light-400">Mã : Đang cập nhật</p>
+          <p className="subtle-medium text-light-400">
+            Mã : {initialData.sku.split("-")[0]}
+          </p>
         </div>
-
+        <div className="flex items-center gap-2">
+          <p className="base-semibold text-light-400 line-through">
+            {formatCurrency(initialData.price)}
+          </p>
+          <p className="base-semibold text-dark-100">
+            {formatCurrency(initialData.price)}
+          </p>
+        </div>
         <div className=" mt-4 rounded-xl border border-dashed border-primary-500 p-4">
           <div className="flex items-center gap-1  ">
             <IconCoin className="text-primary-500" />
@@ -132,31 +149,32 @@ export default function ProductView({ initialData }: TProductViewProps) {
             <h3 className="primary-text-gradient base-semibold inline-block">
               Mô tả sản phẩm
             </h3>
-            <p className="text-justify text-[12px] font-normal leading-[18px]">
-              {initialData.description}
-            </p>
+            <p className="prose max-w-4xl">{initialData.description}</p>
           </div>
           <div className="">
             <h3 className="primary-text-gradient base-semibold inline-block">
               Thông tin thêm
             </h3>
-            {/* {parsedProduct.specification.map((spec: any) => (
-            <div key={spec.key} className="flex items-center gap-2 mt-2">
-              <p className="text-sm font-semibold">{spec.key}:</p>
-              <p className="text-[12px] font-normal leading-[18px] text-justify">
-                {spec.value}
-              </p>
+            {initialData.specs?.map((spec: any) => (
+              <div key={spec.key} className="mt-2 flex items-center gap-2">
+                <p className="text-sm font-semibold">{spec.name}:</p>
+                <p className="text-justify text-[12px] font-normal leading-[18px]">
+                  {spec.value}
+                </p>
+              </div>
+            ))}
+          </div>
+          {parsedContent && (
+            <div className="">
+              <h3 className="primary-text-gradient base-semibold inline-block">
+                Nội dung
+              </h3>
+              <article
+                className="prose max-w-4xl break-all"
+                dangerouslySetInnerHTML={{ __html: parsedContent }}
+              />
             </div>
-          ))} */}
-          </div>
-          <div className="">
-            <h3 className="primary-text-gradient base-semibold inline-block">
-              Nội dung
-            </h3>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Repellendus dolorem harum odio assumenda similique aperiam quas
-            quisquam natus adipisci debitis.
-          </div>
+          )}
         </div>
         <div className="sticky bottom-0 left-0 z-[100] w-full">
           <ProductInteraction />

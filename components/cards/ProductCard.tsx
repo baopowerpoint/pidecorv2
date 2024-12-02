@@ -25,7 +25,9 @@ const ProductCard = ({ product }: Props) => {
         />
 
         <div className="mt-3.5 flex flex-wrap items-center justify-start gap-2">
-          <p className="subtle-medium  text-left text-dark-300">Rèm vải</p>
+          <p className="subtle-medium  text-left text-dark-300">
+            {product.categoryId.name}
+          </p>
           <Badge
             className="subtle-medium bg-primary-100 text-primary-500"
             variant="secondary"
@@ -41,7 +43,9 @@ const ProductCard = ({ product }: Props) => {
           <p className="subtle-regular text-light-400 line-through">
             {formatCurrency(600000)}
           </p>
-          <p className="body-bold text-dark-100">{formatCurrency(400000)}</p>
+          <p className="body-bold text-dark-100">
+            {formatCurrency(product.price)}
+          </p>
         </div>
       </div>
       <div className="flex-between mt-3.5 w-full flex-wrap gap-3">
@@ -49,7 +53,7 @@ const ProductCard = ({ product }: Props) => {
           className="primary-gradient flex-1 px-4 py-1 !text-light-900"
           asChild
         >
-          <Link href={ROUTES.PRODUCT("1")}>
+          <Link href={ROUTES.PRODUCT(product.slug)}>
             <p className="small-semibold">Xem</p>
           </Link>
         </Button>

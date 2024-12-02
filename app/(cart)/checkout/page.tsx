@@ -2,8 +2,8 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-import UserForm from "@/components/forms/UserForm";
 import CartTotal from "@/components/CartTotal";
+import UserForm from "@/components/forms/UserForm";
 
 const CheckoutPage = () => {
   return (

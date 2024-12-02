@@ -40,6 +40,6 @@ const VisitorSchema = new Schema(
   }
 );
 
-const Visitor = models.Visitor || model("Visitor", VisitorSchema);
+const Visitor = models?.Visitor || model("Visitor", VisitorSchema);
 
 export default Visitor;

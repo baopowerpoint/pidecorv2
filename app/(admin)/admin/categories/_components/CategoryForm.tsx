@@ -1,7 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IconLoader } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FormProps, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import ImageUploader from "@/components/admin/ImageUploader";
@@ -16,7 +20,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { createCategory, editCategory } from "@/lib/actions/category.action";
+import logger from "@/lib/logger";
 import { CategoryFormSchema } from "@/lib/validation";
+import { Category } from "@/types/global";
 
 const FormInput = ({
   name,
@@ -56,20 +63,49 @@ const CategoryForm = ({
   type,
 }: {
   pageTitle: string;
-  initialData?: null;
+  initialData?: Category | null;
   type: "create" | "edit";
 }) => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const defaultValues = {
-    name: "",
-    description: "",
-    image: [],
+    name: initialData?.name || "",
+    description: initialData?.description || "",
+    image: initialData?.image ? [initialData.image] : [],
   };
   const form = useForm<z.infer<typeof CategoryFormSchema>>({
     resolver: zodResolver(CategoryFormSchema),
     values: defaultValues,
   });
-  const handleAddBrand = (data: z.infer<typeof CategoryFormSchema>) => {
-    console.log(data);
+  const handleSubmit = async (data: z.infer<typeof CategoryFormSchema>) => {
+    const { name, description, image } = data;
+    try {
+      setLoading(true);
+      if (type === "create") {
+        await createCategory({
+          name,
+          description,
+          image: image[0],
+          path: "/admin/categories",
+        });
+        toast.success("Thêm danh mục thành công");
+      } else {
+        if (initialData) {
+          await editCategory({
+            categoryId: initialData._id,
+            updateData: { ...data, image: image[0] },
+            path: "/admin/categories",
+          });
+          toast.success("Cập nhật danh mục thành công");
+        }
+      }
+    } catch (error) {
+      logger.error(error);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau");
+    } finally {
+      setLoading(false);
+      router.push("/admin/categories");
+    }
   };
   return (
     <Card className="mx-auto w-full">
@@ -79,7 +115,7 @@ const CategoryForm = ({
           <Form {...form}>
             <form
               className="space-y-8"
-              onSubmit={form.handleSubmit(handleAddBrand)}
+              onSubmit={form.handleSubmit(handleSubmit)}
             >
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <FormInput
@@ -108,13 +144,17 @@ const CategoryForm = ({
                           )
                         }
                         onUploadComplete={(urls) => field.onChange(urls)}
-                        onUploading={() => {}}
                       />
                     </div>
                   )}
                 />
               </div>
-              <Button type="submit">Thêm danh mục</Button>
+              <Button type="submit" disabled={loading}>
+                {loading && (
+                  <IconLoader className="w-6 animate-spin text-white" />
+                )}
+                {type === "create" ? "Thêm danh mục" : "Cập nhật "}
+              </Button>
             </form>
           </Form>
         </CardContent>

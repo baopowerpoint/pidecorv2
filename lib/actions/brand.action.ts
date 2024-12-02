@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import Brand from "@/database/product/brand.model";
+import Brand from "@/database/brand.model";
 
 import handleError from "../handlers/error";
 import dbConnect from "../mongoose";
@@ -30,7 +30,7 @@ export async function createBrand(params: CreateBrandParams) {
     revalidatePath(params.path);
     return JSON.stringify(newBrand);
   } catch (error) {
-    return handleError(error);
+    logger.error(error);
   }
 }
 
